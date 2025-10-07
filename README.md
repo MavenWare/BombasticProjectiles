@@ -7,10 +7,10 @@ Drop a ⭐ to support and stay up to date!
 Consider [donating](https://ko-fi.com/jammerz), no pressure 🩷
 
 ## Support
-| MC Version    | API  | Support |
-| :---------:   | :-:  | :-----: |
-| 1.12          | 1.12 |  ⛔ |
-| 1.16 - 1.21.x | 1.16 |  ✅ |
+| MC Version    | API  | Support | Maintained |
+| :---------:   | :-:  | :-----: | :-----: |
+| 1.12          | 1.12 |  ⛔     | ⛔ |
+| 1.16 - 1.21.x | 1.16 |  ✅     | ✅ |
 > Read more on how we update [here.](https://github.com/eh-K/Spigoty/blob/main/API/Codebase%20Unification.md)
 
 ## Features

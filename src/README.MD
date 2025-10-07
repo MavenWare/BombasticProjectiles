@@ -1,6 +1,6 @@
 Source code for BombasticProjectiles.
 
-Follow Apache 2.0 rules. All distributions must maintain credit.
+Follow Apache 2.0 rules. All distributions must provide credit.
 
 ## BombasticProjectiles
 > Current source code.

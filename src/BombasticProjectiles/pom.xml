@@ -9,7 +9,7 @@
     <version>1.0.9</version>
     <packaging>jar</packaging>
 
-    <name>BombasticProjectiles-1.16.5</name>
+    <name>BombasticProjectiles</name>
 
     <properties>
         <java.version>1.8</java.version>

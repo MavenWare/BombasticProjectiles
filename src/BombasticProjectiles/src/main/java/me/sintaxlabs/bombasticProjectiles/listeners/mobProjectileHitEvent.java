@@ -130,6 +130,19 @@ public final class mobProjectileHitEvent implements Listener
                 whichImpactType();
             }
         }
+        /*
+        //Projectile Check - WindCharge
+        else if (mEventInfo.mEntity instanceof WindCharge)
+        {
+            if (main.Global.configToggleWindCharge)
+            {
+                if (main.Global.configToggleImpactCustom)
+                {
+                    mEventInfo.mDamageType = main.Global.configImpactWindCharge;}
+                whichImpactType();
+            }
+        }
+        */
     }
 
     // Checks what type of impact we should choose if either Mob-Explode Check is true.

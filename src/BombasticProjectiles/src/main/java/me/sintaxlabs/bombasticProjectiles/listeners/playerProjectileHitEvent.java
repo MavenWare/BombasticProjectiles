@@ -2,6 +2,7 @@ package me.sintaxlabs.bombasticProjectiles.listeners;
 
 import me.sintaxlabs.bombasticProjectiles.main;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -24,6 +25,7 @@ import static org.bukkit.Bukkit.getServer;
 //Potion
 //Snowball
 //Trident
+//WindCharge
 //----------------------
 
 public final class playerProjectileHitEvent implements Listener
@@ -262,6 +264,19 @@ public final class playerProjectileHitEvent implements Listener
                 }
             }
         }
+        /*
+        //Projectile Check - WindCharge
+        else if (pEventInfo.pEntity instanceof WindCharge)
+        {
+            if (main.Global.configToggleWindCharge)
+            {
+                if (main.Global.configToggleImpactCustom)
+                {
+                    pEventInfo.pDamageType = main.Global.configImpactWindCharge;}
+                whichImpactType();
+            }
+        }
+        */
     }
 
     // Checks what type of impact we should choose.
@@ -301,6 +316,5 @@ public final class playerProjectileHitEvent implements Listener
         entityHurtCheck.hurtGlobal.playerCount = 1;
         launchCheck.launchGlobal.playerShotStarted = false;
     }
-
 
 }

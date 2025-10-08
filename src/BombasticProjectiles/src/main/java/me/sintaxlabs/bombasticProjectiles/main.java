@@ -77,6 +77,7 @@ public final class main extends JavaPlugin implements Listener
         Global.configToggleTrident = this.getConfig().getBoolean("Trident");
         Global.configToggleSnowball = this.getConfig().getBoolean("Snowball");
         Global.configToggleExpBottle = this.getConfig().getBoolean("ExpBottle");
+        Global.configToggleWindCharge = this.getConfig().getBoolean("WindCharge");
         Global.configToggleEnderpearl = this.getConfig().getBoolean("Enderpearl");
         Global.configToggleFishingBobber = this.getConfig().getBoolean("FishingBobber");
 
@@ -86,6 +87,7 @@ public final class main extends JavaPlugin implements Listener
         Global.configImpactTrident = this.getConfig().getInt("Trident-Impact");
         Global.configImpactSnowball = this.getConfig().getInt("Snowball-Impact");
         Global.configImpactExpBottle = this.getConfig().getInt("ExpBottle-Impact");
+        Global.configImpactWindCharge = this.getConfig().getInt("WindCharge-Impact");
         Global.configImpactEnderpearl = this.getConfig().getInt("Enderpearl-Impact");
         Global.configImpactFishingBobber = this.getConfig().getInt("FishingBobber-Impact");
 
@@ -126,6 +128,7 @@ public final class main extends JavaPlugin implements Listener
         public static boolean configToggleTrident;
         public static boolean configToggleSnowball;
         public static boolean configToggleExpBottle;
+        public static boolean configToggleWindCharge;
         public static boolean configToggleEnderpearl;
         public static boolean configToggleFishingBobber;
 
@@ -135,6 +138,7 @@ public final class main extends JavaPlugin implements Listener
         public static int configImpactTrident;
         public static int configImpactSnowball;
         public static int configImpactExpBottle;
+        public static int configImpactWindCharge;
         public static int configImpactEnderpearl;
         public static int configImpactFishingBobber;
 
@@ -203,6 +207,7 @@ public final class main extends JavaPlugin implements Listener
         Global.configToggleTrident = this.getConfig().getBoolean("Trident");
         Global.configToggleSnowball = this.getConfig().getBoolean("Snowball");
         Global.configToggleExpBottle = this.getConfig().getBoolean("ExpBottle");
+        Global.configToggleWindCharge = this.getConfig().getBoolean("WindCharge");
         Global.configToggleEnderpearl = this.getConfig().getBoolean("Enderpearl");
         Global.configToggleFishingBobber = this.getConfig().getBoolean("FishingBobber");
 
@@ -212,6 +217,7 @@ public final class main extends JavaPlugin implements Listener
         Global.configImpactTrident = this.getConfig().getInt("Trident-Impact");
         Global.configImpactSnowball = this.getConfig().getInt("Snowball-Impact");
         Global.configImpactExpBottle = this.getConfig().getInt("ExpBottle-Impact");
+        Global.configImpactWindCharge = this.getConfig().getInt("WindCharge-Impact");
         Global.configImpactEnderpearl = this.getConfig().getInt("Enderpearl-Impact");
         Global.configImpactFishingBobber = this.getConfig().getInt("FishingBobber-Impact");
 

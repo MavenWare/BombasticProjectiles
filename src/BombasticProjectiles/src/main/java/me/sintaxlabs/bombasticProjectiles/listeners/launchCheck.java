@@ -155,6 +155,18 @@ public class launchCheck implements Listener
                     {invalidMessage();}
                 }
             }
+
+            /*
+            //WindCharge CHECK ----------------------------------------------------------
+            else if (e.getEntity() instanceof WindCharge)
+            {
+                if (main.Global.configToggleVerbose)
+                {
+                    if (!main.Global.configToggleWindCharge)
+                    {invalidMessage();}
+                }
+            }
+            */
         }
         else
         {

@@ -249,13 +249,17 @@ public final class playerProjectileHitEvent implements Listener
 
                 // 1.0.9 Fix
                 // Tridents can now be deleted upon landing and will get added back to the players inventory.
-                pEventInfo.pItem = ((Trident) pEventInfo.pEntity).getItem();
-                ItemMeta meta = ((Trident) pEventInfo.pEntity).getItem().getItemMeta();
+                GameMode gm = pEventInfo.playerWhoShot.getGameMode();
+                if (gm == GameMode.SURVIVAL)
+                {
+                    pEventInfo.pItem = ((Trident) pEventInfo.pEntity).getItem();
+                    ItemMeta meta = ((Trident) pEventInfo.pEntity).getItem().getItemMeta();
 
-                Inventory inv = pEventInfo.playerWhoShot.getInventory();
-                pEventInfo.pItem.setItemMeta(meta);
-                inv.addItem(pEventInfo.pItem);
-                pEventInfo.pEntity.remove();
+                    Inventory inv = pEventInfo.playerWhoShot.getInventory();
+                    pEventInfo.pItem.setItemMeta(meta);
+                    inv.addItem(pEventInfo.pItem);
+                    pEventInfo.pEntity.remove();
+                }
             }
         }
     }
@@ -297,5 +301,6 @@ public final class playerProjectileHitEvent implements Listener
         entityHurtCheck.hurtGlobal.playerCount = 1;
         launchCheck.launchGlobal.playerShotStarted = false;
     }
+
 
 }

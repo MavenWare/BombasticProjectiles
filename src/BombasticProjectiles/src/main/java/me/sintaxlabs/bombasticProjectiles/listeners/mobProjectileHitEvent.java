@@ -36,10 +36,7 @@ public final class mobProjectileHitEvent implements Listener
     @EventHandler
     public void mobProjectileHitCheck(ProjectileHitEvent e)
     {
-        if (e.getEntity().getShooter() instanceof Player)
-        {
-            return;
-        }
+        if (e.getEntity().getShooter() instanceof Player) return;
 
         // The shooter is a mob, lets begin.
         if (e.getEntity().getShooter() instanceof Creature)
@@ -81,6 +78,7 @@ public final class mobProjectileHitEvent implements Listener
     private void projectileListCheck()
     {
         String mWorld = mobProjectileHitEvent.mEventInfo.mLocation.getWorld().getName();
+
         if (main.Global.protectedWorldList.contains(mWorld))
         {
             cleanUpProcess();
@@ -91,9 +89,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (main.Global.configToggleArrow)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    mEventInfo.mDamageType = main.Global.configImpactArrow;}
+                if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactArrow;
+
                 whichImpactType();
             }
         }
@@ -102,9 +99,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (main.Global.configTogglePotion)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    mEventInfo.mDamageType = main.Global.configImpactPotion;}
+                if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactPotion;
+
                 whichImpactType();
             }
         }
@@ -113,9 +109,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (main.Global.configToggleSnowball)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    mEventInfo.mDamageType = main.Global.configImpactSnowball;}
+                if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactSnowball;
+
                 whichImpactType();
             }
         }
@@ -124,9 +119,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (main.Global.configToggleTrident)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    mEventInfo.mDamageType = main.Global.configImpactTrident;}
+                if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactTrident;
+
                 whichImpactType();
             }
         }
@@ -136,9 +130,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (main.Global.configToggleWindCharge)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    mEventInfo.mDamageType = main.Global.configImpactWindCharge;}
+                if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactWindCharge;
+
                 whichImpactType();
             }
         }
@@ -152,10 +145,8 @@ public final class mobProjectileHitEvent implements Listener
         {
             if (!main.Global.configToggleMobBreakBlocks)
             {
-                if (main.Global.configToggleVerbose)
-                {
-                    getServer().broadcast(Component.text("§eProjectile Notice §7- §cMobBreakBlocks is toggled off."));
-                }
+                if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cMobBreakBlocks is toggled off."));
+
                 return;
             }
             if (main.Global.configToggleMobImpact)

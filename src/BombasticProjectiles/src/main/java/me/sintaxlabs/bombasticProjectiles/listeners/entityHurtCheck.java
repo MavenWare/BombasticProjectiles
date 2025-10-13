@@ -50,10 +50,7 @@ public final class entityHurtCheck implements Listener
             //First Check: If a mob shot, lets check damage toggles for players and mobs.
             if (launchCheck.launchGlobal.mobShotStarted)
             {
-                if (e.getEntity() instanceof Player)
-                {
-                    toggleCheck_PlayerDamage();
-                }
+                if (e.getEntity() instanceof Player) toggleCheck_PlayerDamage();
                 else if (e.getEntity() instanceof Creature)
                 {
                     hurtGlobal.theMob = e.getEntity();
@@ -67,17 +64,11 @@ public final class entityHurtCheck implements Listener
             //Second Check, okay so a player got hurt, lets run perm and toggle checks.
             else if (e.getEntity() instanceof Player)
             {
-                if (!main.Global.configToggleRequirePermission)
-                {toggleCheck_PlayerDamage();}
+                if (!main.Global.configToggleRequirePermission) toggleCheck_PlayerDamage();
                 else
                 {
-                    if (launchCheck.launchGlobal.permHarmPlayers)
-                    {toggleCheck_PlayerDamage();}
-                    else
-                    {
-                        e.setCancelled(true);
-                        verbose_NoPermissionPlayerDamage();
-                    }
+                    if (launchCheck.launchGlobal.permHarmPlayers) toggleCheck_PlayerDamage();
+                    else e.setCancelled(true); verbose_NoPermissionPlayerDamage();
                 }
 
             }
@@ -89,17 +80,11 @@ public final class entityHurtCheck implements Listener
                 hurtGlobal.theCause = e.getCause();
                 hurtGlobal.theMobType = e.getEntity().getType();
 
-                if (!main.Global.configToggleRequirePermission)
-                {toggleCheck_MobDamage();}
+                if (!main.Global.configToggleRequirePermission) toggleCheck_MobDamage();
                 else
                 {
-                    if (launchCheck.launchGlobal.permHarmMobs)
-                    {toggleCheck_MobDamage();}
-                    else
-                    {
-                        e.setCancelled(true);
-                        verbose_NoPermissionMobDamage();
-                    }
+                    if (launchCheck.launchGlobal.permHarmMobs) toggleCheck_MobDamage();
+                    else e.setCancelled(true); verbose_NoPermissionMobDamage();
                 }
             }
         }
@@ -116,8 +101,7 @@ public final class entityHurtCheck implements Listener
             hurtGlobal.theEvent.setCancelled(true);
             verbose_NoPlayerDamageToggle();
         }
-        else
-        {verbose_SuccessPlayerDamage();}
+        else verbose_SuccessPlayerDamage();
     }
     //------------------------------------------------------------------------------------------------------------------
     // Check toggle for mob damage.
@@ -143,8 +127,7 @@ public final class entityHurtCheck implements Listener
             hurtGlobal.theEvent.setCancelled(true);
             verbose_NoMobDamageToggle();
         }
-        else
-        {verbose_SuccessMobDamage();}
+        else verbose_SuccessMobDamage();
     }
 
 

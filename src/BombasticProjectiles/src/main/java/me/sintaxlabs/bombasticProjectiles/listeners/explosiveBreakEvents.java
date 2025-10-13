@@ -13,11 +13,7 @@ public class explosiveBreakEvents implements Listener
     public void onEntityExplode(EntityExplodeEvent e)
     {
         if (!main.Global.kaboom) return;
-        if (main.Global.protectedEntityList.contains(e.getEntity().getType()))
-        {
-            e.setCancelled(true);
-        }
-
+        if (main.Global.protectedEntityList.contains(e.getEntity().getType())) e.setCancelled(true);
     }
 
     //Prevents things like Item Frames or Paintings from destruction if they're in the ProtectedEntities List.
@@ -25,11 +21,7 @@ public class explosiveBreakEvents implements Listener
     public void hangingEntityCheck(HangingBreakEvent e)
     {
         if (!main.Global.kaboom) return;
-        if (main.Global.protectedEntityList.contains(e.getEntity().getType()))
-        {
-            e.setCancelled(true);
-        }
-
+        if (main.Global.protectedEntityList.contains(e.getEntity().getType())) e.setCancelled(true);
     }
 
     @EventHandler
@@ -40,9 +32,6 @@ public class explosiveBreakEvents implements Listener
         e.blockList().removeIf(b -> main.Global.protectedBlockList.contains(b.getType()));
 
         //Toggle for if the blocks should drop into items.
-        if (!main.Global.configToggleDropItems)
-        {
-            e.setYield(0.0f);
-        }
+        if (!main.Global.configToggleDropItems) e.setYield(0.0f);
     }
 }

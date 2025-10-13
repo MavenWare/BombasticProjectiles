@@ -18,6 +18,7 @@ import static org.bukkit.Bukkit.getServer;
 //Potion
 //Snowball
 //Trident
+//WindCharge
 //----------------------
 
 public class launchCheck implements Listener
@@ -39,7 +40,6 @@ public class launchCheck implements Listener
     {
         launchGlobal.mobShotStarted = false;
         launchGlobal.playerShotStarted = false;
-        //launchGlobal.goodToDeleteTrident = false;
         var object = e.getEntity();
         var shooter = object.getShooter();
 
@@ -53,125 +53,46 @@ public class launchCheck implements Listener
 
                 if (!player.hasPermission("bombasticProjectiles.projectiles"))
                 {
-                    if (main.Global.configToggleVerbose)
-                    {
-                        getServer().broadcast(Component.text("§e'bombasticProjectiles.projectiles' §cis required if Perms are required."));
-                    }
+                    if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§e'bombasticProjectiles.projectiles' §cis required if Perms are required."));
                     return;
                 }
                 else
                 {
                     launchGlobal.permProjectiles = true;
 
-                    if (player.hasPermission("bombasticProjectiles.breakBlocks"))
-                    {
-                        launchGlobal.permBreakBlocks = true;
-                    }
-                    if (player.hasPermission("bombasticProjectiles.harmPlayers"))
-                    {
-                        launchGlobal.permHarmPlayers = true;
-                    }
-                    if (player.hasPermission("bombasticProjectiles.harmMobs"))
-                    {
-                        launchGlobal.permHarmMobs = true;
-                    }
+                    if (player.hasPermission("bombasticProjectiles.breakBlocks")) launchGlobal.permBreakBlocks = true;
+                    if (player.hasPermission("bombasticProjectiles.harmPlayers")) launchGlobal.permHarmPlayers = true;
+                    if (player.hasPermission("bombasticProjectiles.harmMobs")) launchGlobal.permHarmMobs = true;
                 }
             }
             //Arrow CHECK ----------------------------------------------------------
-            if (e.getEntity() instanceof Arrow)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleArrow)
-                    {invalidMessage();}
-                }
-            }
+            if (e.getEntity() instanceof Arrow) if (main.Global.configToggleVerbose && !main.Global.configToggleArrow) invalidMessage();
 
             //Egg CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof Egg)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleEgg)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof Egg) if (main.Global.configToggleVerbose && !main.Global.configToggleEgg) invalidMessage();
 
             //EnderPearl CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof EnderPearl)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleEnderpearl)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof EnderPearl) if (main.Global.configToggleVerbose && !main.Global.configToggleEnderpearl) invalidMessage();
 
             //ExpBottle CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof ThrownExpBottle)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleExpBottle)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof ThrownExpBottle) if (main.Global.configToggleVerbose && !main.Global.configToggleExpBottle) invalidMessage();
 
             //FishingBobber CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof FishHook)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleFishingBobber)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof FishHook) if (main.Global.configToggleVerbose && !main.Global.configToggleFishingBobber) invalidMessage();
 
             //Potion CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof ThrownPotion)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configTogglePotion)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof ThrownPotion) if (main.Global.configToggleVerbose && !main.Global.configTogglePotion) invalidMessage();
 
             //Snowball CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof Snowball)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleSnowball)
-                    {invalidMessage();}
-                }
-            }
-            //Trident CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof Trident)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleTrident)
-                    {invalidMessage();}
-                }
-            }
+            else if (e.getEntity() instanceof Snowball) if (main.Global.configToggleVerbose && !main.Global.configToggleSnowball) invalidMessage();
 
-            /*
+            //Trident CHECK ----------------------------------------------------------
+            else if (e.getEntity() instanceof Trident) if (main.Global.configToggleVerbose && !main.Global.configToggleTrident) invalidMessage();
+
             //WindCharge CHECK ----------------------------------------------------------
-            else if (e.getEntity() instanceof WindCharge)
-            {
-                if (main.Global.configToggleVerbose)
-                {
-                    if (!main.Global.configToggleWindCharge)
-                    {invalidMessage();}
-                }
-            }
-            */
+            //else if (e.getEntity() instanceof WindCharge) if (main.Global.configToggleVerbose && !main.Global.configToggleWindCharge) invalidMessage();
         }
-        else
-        {
-            launchGlobal.mobShotStarted = true;
-        }
+        else launchGlobal.mobShotStarted = true;
     }
     private static void invalidMessage()
     {

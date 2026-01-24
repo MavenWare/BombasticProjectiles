@@ -46,6 +46,10 @@ public final class playerProjectileHitEvent implements Listener
     @EventHandler
     public void playerProjectileHitCheck(ProjectileHitEvent e)
     {
+        //Fixes the Issue: If player shoots arrow to themselves then shoots another arrow, both will explode.
+        if(e.getEntity().isGlowing()) return;
+        e.getEntity().setGlowing(false);
+
         //If the player hit their self, cancel the Event.
         if(e.getHitEntity() == launchCheck.launchGlobal.shooter)
         {
@@ -116,6 +120,8 @@ public final class playerProjectileHitEvent implements Listener
                 }
             }
         }
+        //Fixes the Issue: If player shoots themselves then shoots another item, both will explode.
+        e.getEntity().setGlowing(true);
     }
 
     private void projectileListCheck()
@@ -142,6 +148,9 @@ public final class playerProjectileHitEvent implements Listener
                     pEventInfo.pEntity.remove();
                     whichImpactType();
                 }
+                //Fix to allow consecutive explosions
+                //Issue: If player shoots arrow to themselves then shoots another arrow, both will explode.
+                launchCheck.launchGlobal.playerShotStarted = true;
             }
         }
         //Projectile Check - Thrown Potion
@@ -225,8 +234,8 @@ public final class playerProjectileHitEvent implements Listener
                 GameMode gm = pEventInfo.playerWhoShot.getGameMode();
                 if (gm == GameMode.SURVIVAL || gm == GameMode.ADVENTURE)
                 {
-                    pEventInfo.pItem = ((Trident) pEventInfo.pEntity).getItem();
-                    ItemMeta meta = ((Trident) pEventInfo.pEntity).getItem().getItemMeta();
+                    pEventInfo.pItem = ((Trident) pEventInfo.pEntity).getItemStack();
+                    ItemMeta meta = ((Trident) pEventInfo.pEntity).getItemStack().getItemMeta();
 
                     Inventory inv = pEventInfo.playerWhoShot.getInventory();
                     pEventInfo.pItem.setItemMeta(meta);
@@ -237,7 +246,7 @@ public final class playerProjectileHitEvent implements Listener
             }
         }
 
-        /*
+
         //Projectile Check - WindCharge
         else if (pEventInfo.pEntity instanceof WindCharge)
         {
@@ -249,7 +258,7 @@ public final class playerProjectileHitEvent implements Listener
                 whichImpactType();
             }
         }
-        */
+
     }
 
     // Checks what type of impact we should choose.

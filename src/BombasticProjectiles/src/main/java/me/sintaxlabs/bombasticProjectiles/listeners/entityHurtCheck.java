@@ -110,7 +110,7 @@ public final class entityHurtCheck implements Listener
     {
         if (!main.Global.configToggleHurtNamedMobs)
         {
-            if (hurtGlobal.theMob.getCustomName() != null)
+            if (hurtGlobal.theMob.customName() != null)
             {
                 hurtGlobal.theEvent.setCancelled(true);
                 return;

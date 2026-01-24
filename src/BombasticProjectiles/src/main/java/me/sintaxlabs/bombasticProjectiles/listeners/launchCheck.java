@@ -90,7 +90,7 @@ public class launchCheck implements Listener
             else if (e.getEntity() instanceof Trident) if (main.Global.configToggleVerbose && !main.Global.configToggleTrident) invalidMessage();
 
             //WindCharge CHECK ----------------------------------------------------------
-            //else if (e.getEntity() instanceof WindCharge) if (main.Global.configToggleVerbose && !main.Global.configToggleWindCharge) invalidMessage();
+            else if (e.getEntity() instanceof WindCharge) if (main.Global.configToggleVerbose && !main.Global.configToggleWindCharge) invalidMessage();
         }
         else launchGlobal.mobShotStarted = true;
     }

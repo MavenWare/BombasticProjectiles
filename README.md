@@ -30,4 +30,9 @@ Consider [donating](https://ko-fi.com/jammerz), no pressure 🩷
 ## Links
 [Discord](discord.gg/JjqjaJDaF5) / [Modrinth](https://modrinth.com/plugin/bombasticprojectiles) / [Spigot](https://www.spigotmc.org/resources/bombastic-projectiles.123972/) / [CurseForge](https://legacy.curseforge.com/minecraft/bukkit-plugins/bombastic-projectiles)
 
-
+## Disclaimer
+- If you paid for this, you were scammed.
+- Do not place this or its code behind paywalls.
+- I am not responsible for any nefarious redistributions. 
+- Credit or Link must be provided if distributed in any form.
+- You are free to share or use code but credit must be provided.

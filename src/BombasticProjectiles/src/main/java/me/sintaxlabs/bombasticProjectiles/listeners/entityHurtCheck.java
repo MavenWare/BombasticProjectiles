@@ -96,38 +96,44 @@ public final class entityHurtCheck implements Listener
     // If FALSE then cancel.
     private static void toggleCheck_PlayerDamage()
     {
-        if (!main.Global.configToggleHurtPlayer)
+        if (!main.Global.configToggleFreeMode)
         {
-            hurtGlobal.theEvent.setCancelled(true);
-            verbose_NoPlayerDamageToggle();
+            if (!main.Global.configToggleHurtPlayer)
+            {
+                hurtGlobal.theEvent.setCancelled(true);
+                verbose_NoPlayerDamageToggle();
+            }
+            else verbose_SuccessPlayerDamage();
         }
-        else verbose_SuccessPlayerDamage();
     }
     //------------------------------------------------------------------------------------------------------------------
     // Check toggle for mob damage.
     // If FALSE then cancel.
     private static void toggleCheck_MobDamage()
     {
-        if (!main.Global.configToggleHurtNamedMobs)
+        if (!main.Global.configToggleFreeMode)
         {
-            if (hurtGlobal.theMob.customName() != null)
+            if (!main.Global.configToggleHurtNamedMobs)
+            {
+                if (hurtGlobal.theMob.customName() != null)
+                {
+                    hurtGlobal.theEvent.setCancelled(true);
+                    return;
+                }
+            }
+            //1.0.7 Addition to protect named mobs.
+            if (main.Global.protectedEntityList.contains(hurtGlobal.theEvent.getEntity().getType()))
             {
                 hurtGlobal.theEvent.setCancelled(true);
                 return;
             }
+            if (!main.Global.configToggleHurtMobs)
+            {
+                hurtGlobal.theEvent.setCancelled(true);
+                verbose_NoMobDamageToggle();
+            }
+            else verbose_SuccessMobDamage();
         }
-        //1.0.7 Addition to protect named mobs.
-        if (main.Global.protectedEntityList.contains(hurtGlobal.theEvent.getEntity().getType()))
-        {
-            hurtGlobal.theEvent.setCancelled(true);
-            return;
-        }
-        if (!main.Global.configToggleHurtMobs)
-        {
-            hurtGlobal.theEvent.setCancelled(true);
-            verbose_NoMobDamageToggle();
-        }
-        else verbose_SuccessMobDamage();
     }
 
 

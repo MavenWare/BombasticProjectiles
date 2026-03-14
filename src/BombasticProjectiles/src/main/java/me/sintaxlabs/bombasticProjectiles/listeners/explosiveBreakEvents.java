@@ -31,7 +31,13 @@ public class explosiveBreakEvents implements Listener
         // Removes protected materials from the explosion so they won't break
         e.blockList().removeIf(b -> main.Global.protectedBlockList.contains(b.getType()));
 
-        //Toggle for if the blocks should drop into items.
-        if (!main.Global.configToggleDropItems) e.setYield(0.0f);
+        // If freemode is enabled, we do not need a bunch of dropped items lagging the place.
+        if (!main.Global.configToggleFreeMode)
+        {
+            //Toggle for if the blocks should drop into items.
+            if (!main.Global.configToggleDropItems) e.setYield(0.0f);
+        }
+        else e.setYield(0.0f);
+
     }
 }

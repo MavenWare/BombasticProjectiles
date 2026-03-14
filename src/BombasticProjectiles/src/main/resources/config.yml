@@ -2,12 +2,22 @@
 #-----------------------------------------------#
 #             Bombastic Projectiles
 #
-#                  Sintax Labs
+#                   MavenWare
 #-----------------------------------------------#
 
 #-----------------------------------------------#
 #                 General Options
 #-----------------------------------------------#
+
+
+#ENABLE THIS IF YOU JUST WANT TO BLOW STUFF UP! NO CONFIGS
+# - All players / projectiles / mobs can cause explosions.
+# - Blocks will break regardless of settings/perms.
+# - Block Drops are disabled.
+# - Protection Lists are still active.
+# - Named Mobs are not safe.
+# - Only Global Value is active.
+FreeMode: false
 
 #If true, Permissions and Features must be both granted/enabled.
 #Permissions do not limit mobs if mob-explode toggles are enabled.

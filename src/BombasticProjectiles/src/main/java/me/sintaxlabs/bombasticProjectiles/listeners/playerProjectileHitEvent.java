@@ -46,7 +46,8 @@ public final class playerProjectileHitEvent implements Listener
     @EventHandler
     public void playerProjectileHitCheck(ProjectileHitEvent e)
     {
-        //Fixes the Issue: If player shoots arrow to themselves then shoots another arrow, both will explode.
+        //Hack fix for bug: If player shoots arrow to themselves then shoots another arrow, both will explode.
+        //Projectiles that hit players get the glow effect, so when those strays get reactivated, they won't explode as well.
         if(e.getEntity().isGlowing()) return;
         e.getEntity().setGlowing(false);
 
@@ -62,25 +63,28 @@ public final class playerProjectileHitEvent implements Listener
         {
             pEventInfo.playerWhoShot = user;
 
-            if (main.Global.configToggleRequirePermission)
+            if (!main.Global.configToggleFreeMode)
             {
-                if (!user.hasPermission("bombasticProjectiles.projectiles")) return;
-
-                //So permission is required and enabled, and they have the Projectiles perm.
-                //If both conditions are true then the explosion can break blocks. Otherwise, cannot.
-                pEventInfo.goodToBreakBlocks = launchCheck.launchGlobal.permBreakBlocks && main.Global.configTogglePlayerBreakBlocks;
-
-                if (!pEventInfo.goodToBreakBlocks && main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cPermission or Toggle to BreakBlocks is not granted/enabled."));
-            }
-            //No permission? Okay, lets check if BlockBreak is toggled.
-            else
-            {
-                if (!main.Global.configTogglePlayerBreakBlocks)
+                if (main.Global.configToggleRequirePermission)
                 {
-                    pEventInfo.goodToBreakBlocks = false;
-                    if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cPlayerBreakBlocks is toggled off."));
+                    if (!user.hasPermission("bombasticProjectiles.projectiles")) return;
+
+                    //So permission is required and enabled, and they have the Projectiles perm.
+                    //If both conditions are true then the explosion can break blocks. Otherwise, cannot.
+                    pEventInfo.goodToBreakBlocks = launchCheck.launchGlobal.permBreakBlocks && main.Global.configTogglePlayerBreakBlocks;
+
+                    if (!pEventInfo.goodToBreakBlocks && main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cPermission or Toggle to BreakBlocks is not granted/enabled."));
                 }
-                else pEventInfo.goodToBreakBlocks = true;
+                //No permission? Okay, lets check if BlockBreak is toggled.
+                else
+                {
+                    if (!main.Global.configTogglePlayerBreakBlocks)
+                    {
+                        pEventInfo.goodToBreakBlocks = false;
+                        if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cPlayerBreakBlocks is toggled off."));
+                    }
+                    else pEventInfo.goodToBreakBlocks = true;
+                }
             }
 
             //------------------------------------
@@ -93,7 +97,6 @@ public final class playerProjectileHitEvent implements Listener
                 pEventInfo.pLocation = locationBlock;
                 pEventInfo.pTarget = worldBlock;
                 pEventInfo.pEntity = e.getEntity();
-                //pEventInfo.pItem = Objects.requireNonNull(pEventInfo.playerWhoShot.getPlayer()).getInventory().getItemInMainHand().add();
 
                 projectileListCheck();
             }
@@ -114,13 +117,13 @@ public final class playerProjectileHitEvent implements Listener
                     pEventInfo.pLocation = locationEntity;
                     pEventInfo.pTarget = worldEntity;
                     pEventInfo.pEntity = e.getEntity();
-                    //pEventInfo.pItem = Objects.requireNonNull(pEventInfo.playerWhoShot.getPlayer()).getInventory().getItemInMainHand().add();
 
                     projectileListCheck();
                 }
             }
         }
-        //Fixes the Issue: If player shoots themselves then shoots another item, both will explode.
+        //Hack fix for bug: If player shoots arrow to themselves then shoots another arrow, both will explode.
+        //Projectiles that hit players get the glow effect, so when those glowing strays get reactivated, they won't explode as well.
         e.getEntity().setGlowing(true);
     }
 
@@ -129,20 +132,20 @@ public final class playerProjectileHitEvent implements Listener
         String pWorld = pEventInfo.pLocation.getWorld().getName();
         if (main.Global.protectedWorldList.contains(pWorld))
         {
-            if (main.Global.configToggleVerbose)
-            {pEventInfo.playerWhoShot.sendMessage("§eExplosive projectiles are disabled in this world.");}
+            if (main.Global.configToggleVerbose) pEventInfo.playerWhoShot.sendMessage("§eExplosive projectiles are disabled in this world.");
             cleanUpProcess();
             return;
         }
 
-        //Projectile Check - Arrow
-        if (pEventInfo.pEntity instanceof Arrow)
+        if (!main.Global.configToggleFreeMode)
         {
-            if (main.Global.configToggleArrow)
+            //Projectile Check - Arrow
+            if (pEventInfo.pEntity instanceof Arrow && main.Global.configToggleArrow)
             {
-                if (main.Global.configToggleImpactCustom)
-                {pEventInfo.pDamageType = main.Global.configImpactArrow;}
+                if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactArrow;
 
+                //This fixes an old bug where arrows would float.
+                //Gameplay Wise, if blocks are breakable then arrows should disappear as well.
                 if (pEventInfo.goodToBreakBlocks)
                 {
                     pEventInfo.pEntity.remove();
@@ -152,82 +155,65 @@ public final class playerProjectileHitEvent implements Listener
                 //Issue: If player shoots arrow to themselves then shoots another arrow, both will explode.
                 launchCheck.launchGlobal.playerShotStarted = true;
             }
-        }
-        //Projectile Check - Thrown Potion
-        else if (pEventInfo.pEntity instanceof ThrownPotion)
-        {
-            if (main.Global.configTogglePotion)
+
+            //Projectile Check - Thrown Potion
+            else if (pEventInfo.pEntity instanceof ThrownPotion && main.Global.configTogglePotion)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactPotion;
-
                 whichImpactType();
+
                 //Fix to allow consecutive explosions
                 launchCheck.launchGlobal.playerShotStarted = true;
             }
-        }
-        //Projectile Check - Snowball
-        else if (pEventInfo.pEntity instanceof Snowball)
-        {
-            if (main.Global.configToggleSnowball)
+
+            //Projectile Check - Snowball
+            else if (pEventInfo.pEntity instanceof Snowball && main.Global.configToggleSnowball)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactSnowball;
-
                 whichImpactType();
+
                 //Fix to allow consecutive explosions
                 launchCheck.launchGlobal.playerShotStarted = true;
             }
-        }
-        //Projectile Check - Egg
-        else if (pEventInfo.pEntity instanceof Egg)
-        {
-            if (main.Global.configToggleEgg)
+
+            //Projectile Check - Egg
+            else if (pEventInfo.pEntity instanceof Egg && main.Global.configToggleEgg)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactEgg;
-
                 whichImpactType();
+
                 //Fix to allow consecutive explosions
                 launchCheck.launchGlobal.playerShotStarted = true;
             }
-        }
-        //Projectile Check - ExpBottle
-        else if (pEventInfo.pEntity instanceof ThrownExpBottle)
-        {
-            if (main.Global.configToggleExpBottle)
+
+            //Projectile Check - ExpBottle
+            else if (pEventInfo.pEntity instanceof ThrownExpBottle && main.Global.configToggleExpBottle)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactExpBottle;
-
                 whichImpactType();
+
                 //Fix to allow consecutive explosions
                 launchCheck.launchGlobal.playerShotStarted = true;
             }
-        }
-        //Projectile Check - Fishing Rod
-        else if (pEventInfo.pEntity instanceof FishHook)
-        {
-            if (main.Global.configToggleFishingBobber)
+
+            //Projectile Check - Fishing Rod
+            else if (pEventInfo.pEntity instanceof FishHook && main.Global.configToggleFishingBobber)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactFishingBobber;
-
                 whichImpactType();
             }
-        }
-        //Projectile Check - Enderpearl
-        else if (pEventInfo.pEntity instanceof EnderPearl)
-        {
-            if (main.Global.configToggleEnderpearl)
+
+            //Projectile Check - Enderpearl
+            else if (pEventInfo.pEntity instanceof EnderPearl && main.Global.configToggleEnderpearl)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactEnderpearl;
-
                 whichImpactType();
             }
-        }
-        //Projectile Check - Trident
-        else if (pEventInfo.pEntity instanceof Trident)
-        {
-            if (main.Global.configToggleTrident)
+
+            //Projectile Check - Trident
+            else if (pEventInfo.pEntity instanceof Trident && main.Global.configToggleTrident)
             {
                 if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactTrident;
-
                 whichImpactType();
 
                 // 1.0.9 Fix - Tridents can now be deleted upon landing and will get added back to the players inventory.
@@ -244,21 +230,90 @@ public final class playerProjectileHitEvent implements Listener
                 }
                 else if (gm == GameMode.CREATIVE) pEventInfo.pEntity.remove();
             }
-        }
 
-
-        //Projectile Check - WindCharge
-        else if (pEventInfo.pEntity instanceof WindCharge)
-        {
-            if (main.Global.configToggleWindCharge)
+            //Projectile Check - WindCharge
+            else if (pEventInfo.pEntity instanceof WindCharge && main.Global.configToggleWindCharge)
             {
-                if (main.Global.configToggleImpactCustom)
-                {
-                    pEventInfo.pDamageType = main.Global.configImpactWindCharge;}
+                if (main.Global.configToggleImpactCustom) pEventInfo.pDamageType = main.Global.configImpactWindCharge;
                 whichImpactType();
             }
         }
+        else
+        {
+            //Projectile Check - Arrow
+            if (pEventInfo.pEntity instanceof Arrow)
+            {
+                pEventInfo.pEntity.remove();
+                whichImpactType();
+                //Fix to allow consecutive explosions
+                //Issue: If player shoots arrow to themselves then shoots another arrow, both will explode.
+                launchCheck.launchGlobal.playerShotStarted = true;
+            }
+            //Projectile Check - Thrown Potion
+            else if (pEventInfo.pEntity instanceof ThrownPotion)
+            {
+                whichImpactType();
 
+                //Fix to allow consecutive explosions
+                launchCheck.launchGlobal.playerShotStarted = true;
+            }
+
+            //Projectile Check - Snowball
+            else if (pEventInfo.pEntity instanceof Snowball)
+            {
+                whichImpactType();
+
+                //Fix to allow consecutive explosions
+                launchCheck.launchGlobal.playerShotStarted = true;
+            }
+
+            //Projectile Check - Egg
+            else if (pEventInfo.pEntity instanceof Egg)
+            {
+                whichImpactType();
+
+                //Fix to allow consecutive explosions
+                launchCheck.launchGlobal.playerShotStarted = true;
+            }
+
+            //Projectile Check - ExpBottle
+            else if (pEventInfo.pEntity instanceof ThrownExpBottle)
+            {
+                whichImpactType();
+
+                //Fix to allow consecutive explosions
+                launchCheck.launchGlobal.playerShotStarted = true;
+            }
+
+            //Projectile Check - Fishing Rod
+            else if (pEventInfo.pEntity instanceof FishHook) whichImpactType();
+
+            //Projectile Check - Enderpearl
+            else if (pEventInfo.pEntity instanceof EnderPearl) whichImpactType();
+
+            //Projectile Check - Trident
+            else if (pEventInfo.pEntity instanceof Trident)
+            {
+                whichImpactType();
+
+                // 1.0.9 Fix - Tridents can now be deleted upon landing and will get added back to the players inventory.
+                GameMode gm = pEventInfo.playerWhoShot.getGameMode();
+                if (gm == GameMode.SURVIVAL || gm == GameMode.ADVENTURE)
+                {
+                    pEventInfo.pItem = ((Trident) pEventInfo.pEntity).getItemStack();
+                    ItemMeta meta = ((Trident) pEventInfo.pEntity).getItemStack().getItemMeta();
+
+                    Inventory inv = pEventInfo.playerWhoShot.getInventory();
+                    pEventInfo.pItem.setItemMeta(meta);
+                    inv.addItem(pEventInfo.pItem);
+                    pEventInfo.pEntity.remove();
+                }
+                else if (gm == GameMode.CREATIVE) pEventInfo.pEntity.remove();
+            }
+
+            //Projectile Check - WindCharge
+            else if (pEventInfo.pEntity instanceof WindCharge) whichImpactType();
+        }
     }
 
     // Checks what type of impact we should choose.
@@ -266,25 +321,39 @@ public final class playerProjectileHitEvent implements Listener
     {
         if (launchCheck.launchGlobal.playerShotStarted)
         {
-            if (!main.Global.configToggleImpactCustom)
+            if (!main.Global.configToggleFreeMode)
+            {
+                if (!main.Global.configToggleImpactCustom)
+                {
+                    //Explosive Value will be the Config's Global Value.
+                    pEventInfo.pImpactValue = main.Global.configImpactGlobal;
+                    pEventInfo.pString = "§aPlayer Projectile Success §7- §eGlobal Impact: §6";
+                }
+                else
+                {
+                    //Explosive Value will be whichever projectile is chosen since Custom Impact is enabled.
+                    pEventInfo.pImpactValue = pEventInfo.pDamageType;
+                    pEventInfo.pString = "§aPlayer Projectile Success §7- §eCustom Impact: §6";
+                }
+
+                if (main.Global.configToggleVerbose) getServer().broadcast(Component.text(pEventInfo.pString + pEventInfo.pImpactValue));
+
+                main.Global.kaboom = true;
+
+                pEventInfo.pTarget.createExplosion(pEventInfo.pLocation, pEventInfo.pImpactValue, main.Global.configToggleFire, pEventInfo.goodToBreakBlocks);
+                cleanUpProcess();
+            }
+            else
             {
                 //Explosive Value will be the Config's Global Value.
                 pEventInfo.pImpactValue = main.Global.configImpactGlobal;
                 pEventInfo.pString = "§aPlayer Projectile Success §7- §eGlobal Impact: §6";
+
+                main.Global.kaboom = true;
+
+                pEventInfo.pTarget.createExplosion(pEventInfo.pLocation, pEventInfo.pImpactValue, main.Global.configToggleFire, pEventInfo.goodToBreakBlocks);
+                cleanUpProcess();
             }
-            else
-            {
-                //Explosive Value will be whichever projectile is chosen since Custom Impact is enabled.
-                pEventInfo.pImpactValue = pEventInfo.pDamageType;
-                pEventInfo.pString = "§aPlayer Projectile Success §7- §eCustom Impact: §6";
-            }
-
-            if (main.Global.configToggleVerbose) getServer().broadcast(Component.text(pEventInfo.pString + pEventInfo.pImpactValue));
-
-            main.Global.kaboom = true;
-
-            pEventInfo.pTarget.createExplosion(pEventInfo.pLocation, pEventInfo.pImpactValue, main.Global.configToggleFire, pEventInfo.goodToBreakBlocks);
-            cleanUpProcess();
         }
     }
 

@@ -1,14 +1,14 @@
 ////////////////////////////////////
 ///                              ///
-///         Sintax Labs          ///
+///           MavenWare          ///
 ///                              ///
 ////////////////////////////////////
 
 // https://github.com/MavenWare
-// Supports: 1.16.x - 1.21.x
-// Version: 1.0.9
+// Supports: 1.21.x
+// Version: 1.0.12
 
-//Dated: October 6, 2025
+//Dated: March 13, 2026
 
 //Logic Structure:
 //----------------
@@ -54,6 +54,8 @@ public final class main extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new playerProjectileHitEvent(), this);
 
         // KEEP THESE IN ORDER OF CONFIG.
+        Global.configToggleFreeMode = this.getConfig().getBoolean("FreeMode");
+
         Global.configToggleRequirePermission = this.getConfig().getBoolean("RequirePermission");
         Global.configImpactGlobal = this.getConfig().getInt("GlobalImpact");
         Global.configToggleImpactCustom = this.getConfig().getBoolean("CustomImpact");
@@ -105,6 +107,8 @@ public final class main extends JavaPlugin implements Listener
     public static class Global
     {
         // KEEP THESE IN ORDER OF CONFIG.
+        public static boolean configToggleFreeMode;
+
         public static boolean configToggleRequirePermission;
         public static int configImpactGlobal;
         public static boolean configToggleImpactCustom;
@@ -144,8 +148,10 @@ public final class main extends JavaPlugin implements Listener
 
         public static boolean configToggleVerbose;
 
-        // Used as flag for when an explosion happens.
+        // Used as a global flag for when an explosion happens.
         // Various checks ONLY occur during the millisecond of the explosion being flagged.
+        // If you want to prevent damage to players and mobs then damage is restricted during the millisecond
+        // --> that this bool is true.
         public static boolean kaboom;
 
         public static Set<Material> protectedBlockList;
@@ -184,6 +190,8 @@ public final class main extends JavaPlugin implements Listener
     private void refreshConfig()
     {
         // KEEP THESE IN ORDER OF CONFIG.
+        Global.configToggleFreeMode = this.getConfig().getBoolean("FreeMode");
+
         Global.configToggleRequirePermission = this.getConfig().getBoolean("RequirePermission");
         Global.configImpactGlobal = this.getConfig().getInt("GlobalImpact");
         Global.configToggleImpactCustom = this.getConfig().getBoolean("CustomImpact");
@@ -281,13 +289,3 @@ public final class main extends JavaPlugin implements Listener
         // Plugin shutdown logic
     }
 }
-
-//Cut Code to delete an entity and spawn it in the inventory player who caused the Event.
-//
-//pEventInfo.pEntity.remove();
-//Inventory inv = pEventInfo.playerWhoShot.getInventory();
-//inv.addItem(ItemStack.of(Material.ARROW, 1));
-//
-//Old Logic
-//Player player = ((Player) shooter).getPlayer();
-//assert player != null;

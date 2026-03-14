@@ -46,7 +46,20 @@ public final class mobProjectileHitEvent implements Listener
             //------------------------------------
             if (e.getHitBlock() != null)
             {
-                if (main.Global.configToggleMobsExplodeBlocks)
+                if (!main.Global.configToggleFreeMode)
+                {
+                    if (main.Global.configToggleMobsExplodeBlocks)
+                    {
+                        Location locationBlock = e.getHitBlock().getLocation();
+                        World worldBlock = locationBlock.getWorld();
+                        mEventInfo.mLocation = locationBlock;
+                        mEventInfo.mTarget = worldBlock;
+                        mEventInfo.mEntity = e.getEntity();
+
+                        projectileListCheck();
+                    }
+                }
+                else
                 {
                     Location locationBlock = e.getHitBlock().getLocation();
                     World worldBlock = locationBlock.getWorld();
@@ -62,12 +75,25 @@ public final class mobProjectileHitEvent implements Listener
             //------------------------------------
             else if (e.getHitEntity() != null)
             {
-                if (main.Global.configToggleMobsExplodeEntities)
+                if (!main.Global.configToggleFreeMode)
                 {
-                    Location locationEntity = e.getHitEntity().getLocation();
-                    World worldEntity = e.getHitEntity().getWorld();
-                    mEventInfo.mLocation = locationEntity;
-                    mEventInfo.mTarget = worldEntity;
+                    if (main.Global.configToggleMobsExplodeEntities)
+                    {
+                        Location locationEntity = e.getHitEntity().getLocation();
+                        World worldEntity = e.getHitEntity().getWorld();
+                        mEventInfo.mLocation = locationEntity;
+                        mEventInfo.mTarget = worldEntity;
+                        mEventInfo.mEntity = e.getEntity();
+
+                        projectileListCheck();
+                    }
+                }
+                else
+                {
+                    Location locationBlock = e.getHitBlock().getLocation();
+                    World worldBlock = locationBlock.getWorld();
+                    mEventInfo.mLocation = locationBlock;
+                    mEventInfo.mTarget = worldBlock;
                     mEventInfo.mEntity = e.getEntity();
 
                     projectileListCheck();
@@ -84,58 +110,47 @@ public final class mobProjectileHitEvent implements Listener
             cleanUpProcess();
             return;
         }
-        //Projectile Check - Arrow
-        if (mEventInfo.mEntity instanceof Arrow)
+
+        if (!main.Global.configToggleFreeMode)
         {
-            if (main.Global.configToggleArrow)
+            //Projectile Check - Arrow
+            if (mEventInfo.mEntity instanceof Arrow && main.Global.configToggleArrow)
             {
                 if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactArrow;
 
                 whichImpactType();
             }
-        }
-        //Projectile Check - Thrown Potion
-        else if (mEventInfo.mEntity instanceof ThrownPotion)
-        {
-            if (main.Global.configTogglePotion)
+            //Projectile Check - Thrown Potion
+            else if (mEventInfo.mEntity instanceof ThrownPotion && main.Global.configTogglePotion)
             {
                 if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactPotion;
 
                 whichImpactType();
             }
-        }
-        //Projectile Check - Snowball
-        else if (mEventInfo.mEntity instanceof Snowball)
-        {
-            if (main.Global.configToggleSnowball)
+            //Projectile Check - Snowball
+            else if (mEventInfo.mEntity instanceof Snowball && main.Global.configToggleSnowball)
             {
                 if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactSnowball;
 
                 whichImpactType();
             }
-        }
-        //Projectile Check - Trident
-        else if (mEventInfo.mEntity instanceof Trident)
-        {
-            if (main.Global.configToggleTrident)
+            //Projectile Check - Trident
+            else if (mEventInfo.mEntity instanceof Trident && main.Global.configToggleTrident)
             {
                 if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactTrident;
 
                 whichImpactType();
             }
-        }
 
-        //Projectile Check - WindCharge
-        else if (mEventInfo.mEntity instanceof WindCharge)
-        {
-            if (main.Global.configToggleWindCharge)
+            //Projectile Check - WindCharge
+            else if (mEventInfo.mEntity instanceof WindCharge && main.Global.configToggleWindCharge)
             {
                 if (main.Global.configToggleImpactCustom) mEventInfo.mDamageType = main.Global.configImpactWindCharge;
 
                 whichImpactType();
             }
         }
-
+        else whichImpactType();
     }
 
     // Checks what type of impact we should choose if either Mob-Explode Check is true.
@@ -143,38 +158,51 @@ public final class mobProjectileHitEvent implements Listener
     {
         if (launchCheck.launchGlobal.mobShotStarted)
         {
-            if (!main.Global.configToggleMobBreakBlocks)
+            if (!main.Global.configToggleFreeMode)
             {
-                if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cMobBreakBlocks is toggled off."));
+                if (!main.Global.configToggleMobBreakBlocks)
+                {
+                    if (main.Global.configToggleVerbose) getServer().broadcast(Component.text("§eProjectile Notice §7- §cMobBreakBlocks is toggled off."));
 
-                return;
+                    return;
+                }
+                if (main.Global.configToggleMobImpact)
+                {
+                    //Explosive Value will be the Config's Mob Value.
+                    mEventInfo.mImpactValue = main.Global.configImpactMob;
+                    mEventInfo.mString = "§aMob Projectile Success §7- §eMob Impact: §6";
+                }
+                else if (!main.Global.configToggleImpactCustom)
+                {
+                    //Explosive Value will be the Config's Global Value.
+                    mEventInfo.mImpactValue = main.Global.configImpactGlobal;
+                    mEventInfo.mString = "§aMob Projectile Success §7- §eGlobal Impact: §6";
+                }
+                else
+                {
+                    //Explosive Value will be whichever projectile is chosen since Custom Impact is enabled.
+                    mEventInfo.mImpactValue = mEventInfo.mDamageType;
+                    mEventInfo.mString = "§aMob Projectile Success §7- §eCustom Impact: §6";
+                }
+                //----------------------------------------------------------------------------
+                if (main.Global.configToggleVerbose) getServer().broadcast(Component.text(mEventInfo.mString + mEventInfo.mImpactValue));
+
+                //----------------------------------------------------------------------------
+                main.Global.kaboom = true;
+                mEventInfo.mTarget.createExplosion(mEventInfo.mLocation, mEventInfo.mImpactValue, main.Global.configToggleFire, main.Global.configToggleMobBreakBlocks);
+                cleanUpProcess();
             }
-            if (main.Global.configToggleMobImpact)
-            {
-                //Explosive Value will be the Config's Mob Value.
-                mEventInfo.mImpactValue = main.Global.configImpactMob;
-                mEventInfo.mString = "§aMob Projectile Success §7- §eMob Impact: §6";
-            }
-            else if (!main.Global.configToggleImpactCustom)
+            else
             {
                 //Explosive Value will be the Config's Global Value.
                 mEventInfo.mImpactValue = main.Global.configImpactGlobal;
                 mEventInfo.mString = "§aMob Projectile Success §7- §eGlobal Impact: §6";
+
+                main.Global.kaboom = true;
+                mEventInfo.mTarget.createExplosion(mEventInfo.mLocation, mEventInfo.mImpactValue, main.Global.configToggleFire, main.Global.configToggleMobBreakBlocks);
+                cleanUpProcess();
             }
-            else
-            {
-                //Explosive Value will be whichever projectile is chosen since Custom Impact is enabled.
-                mEventInfo.mImpactValue = mEventInfo.mDamageType;
-                mEventInfo.mString = "§aMob Projectile Success §7- §eCustom Impact: §6";
-            }
-            //----------------------------------------------------------------------------
-            if (main.Global.configToggleVerbose)
-            {
-                getServer().broadcast(Component.text(mEventInfo.mString + mEventInfo.mImpactValue));}
-            //----------------------------------------------------------------------------
-            main.Global.kaboom = true;
-            mEventInfo.mTarget.createExplosion(mEventInfo.mLocation, mEventInfo.mImpactValue, main.Global.configToggleFire, main.Global.configToggleMobBreakBlocks);
-            cleanUpProcess();
+
         }
     }
 

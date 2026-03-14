@@ -10,7 +10,8 @@ Consider [donating](https://ko-fi.com/jammerz), no pressure 🩷
 | MC Version    | API  | Support | Maintained |
 | :---------:   | :-:  | :-----: | :-----: |
 | 1.12          | 1.12 |  ⛔     | ⛔ |
-| 1.16 - 1.21.x | 1.16 |  ✅     | ✅ |
+| 1.16 - 1.20   | 1.16 |  ⛔     | ⛔ |
+| 1.21.x        | 1.21 |  ✅     | ✅ |
 > Read more on how we update [here.](https://github.com/eh-K/Spigoty/blob/main/API/Codebase%20Unification.md)
 
 ## Features
